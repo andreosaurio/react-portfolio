@@ -21,6 +21,13 @@ class Blog extends Component {
     window.addEventListener("scroll", this.onScroll, false);
   }
 
+  handleSuccessfulNewBlogSubmission = (blog) => {
+    this.setState({
+      blogModalIsOpen: false,
+      blogItems: [blog].concat(this.state.blogItems),
+    });
+  };
+
   handleModalClose = () => {
     this.setState({
       blogModalIsOpen: false,
@@ -90,13 +97,21 @@ class Blog extends Component {
     return (
       <div className="blog-container">
         <BlogModal
+          handleSuccessfulNewBlogSubmission={
+            this.handleSuccessfulNewBlogSubmission
+          }
           handleModalClose={this.handleModalClose}
           modalIsOpen={this.state.blogModalIsOpen}
         ></BlogModal>
 
-        <div className="new-blog-link">
-          <a onClick={this.handleNewBlogClick}>Open Modal!</a>
-        </div>
+        {this.props.loggedInStatus === "LOGGED_IN" ? (
+          <div className="new-blog-link">
+            <a onClick={this.handleNewBlogClick}>
+              <FontAwesomeIcon icon="plus-circle" />
+            </a>
+          </div>
+        ) : null}
+
         <div className="content-container">{blogRecords}</div>
         {this.state.isLoading ? (
           <div className="content-loader">
